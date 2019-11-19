@@ -57,7 +57,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 - To login, you want to `POST` to `/login` with your email and password, and then you get a JWT back.
 - To access an authenticated endpoint after you've logged in, you have to send the JWT along as a header. We have a simple test authenticated endpoint at `/authenticated`.
 
-### Signup
+### Signup `POST /signup`
 
 - HTTPie:
 
@@ -92,7 +92,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
   }
   ```
 
-### Login
+### Login `POST /login`
 
 - HTTPie:
 
@@ -125,7 +125,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
   }
   ```
 
-### Check whether authenticated
+### Check whether authenticated `GET /authenticated`
 
 - HTTPie:
 
@@ -155,7 +155,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
 ## Posts
 
-### Get a single post
+### Get a single post `GET /posts/:id`
 
 - [Example](/posts/1)
 
@@ -177,7 +177,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
   `Post`
 
-### Like a post
+### Like a post `POST /posts/:id/likes`
 
 _This is an authenticated API endpoint._
 
@@ -208,7 +208,7 @@ _This is an authenticated API endpoint._
   }
   ```
 
-### Unlike a post
+### Unlike a post `DELETE /posts/:id/likes`
 
 _This is an authenticated API endpoint._
 
@@ -239,7 +239,7 @@ _This is an authenticated API endpoint._
   }
   ```
 
-### Get a post's comments
+### Get a post's comments `GET /posts/:id/comments`
 
 - [Example](/posts/1/comments)
 
@@ -266,7 +266,7 @@ _This is an authenticated API endpoint._
   }
   ```
 
-### Add a comment
+### Add a comment `POST /posts/:id/comments`
 
 _This is an authenticated API endpoint. The new comment is made in the name of the user currently logged in._
 
@@ -297,7 +297,7 @@ _This is an authenticated API endpoint. The new comment is made in the name of t
 
   `Comment`
 
-### Get a list of posts
+### Get a list of posts `GET /posts`
 
 _Paginated with the optional `offset` and `limit` query parameters._
 
@@ -326,7 +326,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
   }
   ```
 
-### Get a list of posts (by tag)
+### Get a list of posts (by tag) `GET /posts?tag`
 
 _Paginated with the optional `offset` and `limit` query parameters._
 
@@ -355,7 +355,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
   }
   ```
 
-### Create a new post
+### Create a new post `POST /posts`
 
 _This is an authenticated API endpoint. The new post is made in the name of the user currently logged in._
 
@@ -386,7 +386,7 @@ _This is an authenticated API endpoint. The new post is made in the name of the 
 
   `Post`
 
-### Update a post
+### Update a post `PUT /posts/:id`
 
 _This is an authenticated API endpoint. The new post is made in the name of the user currently logged in._
 
@@ -394,7 +394,7 @@ _You don't have to send all post fields. Only the included fields will be update
 
 - HTTPie:
 
-  `http -v POST :5000/posts Authorization:"Bearer JWT" title="DEF"`
+  `http -v PUT :5000/posts Authorization:"Bearer JWT" title="DEF"`
 
 - JavaScript:
 
@@ -419,7 +419,7 @@ _You don't have to send all post fields. Only the included fields will be update
 
   `Post`
 
-### Delete a post
+### Delete a post `DELETE /posts/:id`
 
 _This is an authenticated API endpoint. The post must be owned by the user currently logged in._
 
@@ -456,7 +456,7 @@ _This is an authenticated API endpoint. The post must be owned by the user curre
 
 _Refer to the [`/signup`](#signup) endpoint above._
 
-### Get a single developer's profile
+### Get a single developer's profile `GET /developers/:id`
 
 - [Example](/developers/1)
 
@@ -478,7 +478,7 @@ _Refer to the [`/signup`](#signup) endpoint above._
 
   `Developer`
 
-### Get a list of developers
+### Get a list of developers `GET /developers`
 
 _Paginated with the optional `offset` and `limit` query parameters._
 
@@ -507,7 +507,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
   }
   ```
 
-### Update your profile
+### Update your profile `PUT /developers/:id`
 
 _This is an authenticated API endpoint. You can of course only edit your own profile._
 
@@ -539,7 +539,7 @@ _This is an authenticated API endpoint. You can of course only edit your own pro
 
   `Developer`
 
-### Delete your account
+### Delete your account `DELETE /developers/:id`
 
 _This is an authenticated API endpoint. You can of course only delete your own account._
 

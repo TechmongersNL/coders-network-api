@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 
 const db = new Sequelize(
   process.env.DATABASE_URL ||
-    "postgres://postgres:secret@localhost:5432/postgres"
+    "postgres://postgres:secret@localhost:5555/postgres"
 );
 
 const Technology = db.define(

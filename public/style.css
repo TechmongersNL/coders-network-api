@@ -3,17 +3,44 @@ html {
 }
 
 body {
-  padding: 0 2rem 0 26rem;
+  padding: 2rem 2rem 0 26rem;
 }
 
 .toc {
   position: fixed;
-  left: 2rem;
+  top: 0;
+  left: 0;
+  padding: 4rem 2rem 4rem 1rem;
   width: 22rem;
-  padding-top: 2rem;
+
+  box-sizing: border-box;
+
+  max-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .readme {
-  margin: 2rem 0 10rem 0;
+  margin: 0 0 10rem 0;
   max-width: 50rem;
+}
+
+.markdown-body details summary {
+  font-size: 80%;
+  text-transform: uppercase;
+}
+
+.markdown-body details summary + p {
+  margin-top: 1rem;
+}
+
+.readme h3 code,
+.toc li a code {
+  font-size: 60% !important;
+  background: none;
+}
+
+.toc li a code {
+  color: #888;
+  white-space: nowrap;
 }
