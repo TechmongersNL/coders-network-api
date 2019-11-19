@@ -2,7 +2,7 @@ const { Developer } = require("../model");
 
 const { toData } = require("./jwt");
 
-function authenticated(req, res, next) {
+function mustBeAuthenticated(req, res, next) {
   const auth =
     req.headers.authorization && req.headers.authorization.split(" ");
 
@@ -14,7 +14,7 @@ function authenticated(req, res, next) {
           if (!developer) {
             res.status(400).json({ error: "Developer does not exist" });
           } else {
-            req.developer = developer;
+            req.user = developer;
             next();
           }
         })
@@ -31,4 +31,4 @@ function authenticated(req, res, next) {
   }
 }
 
-module.exports = authenticated;
+module.exports = mustBeAuthenticated;

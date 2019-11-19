@@ -20,23 +20,34 @@ router.post(
       name: Joi.string().required()
     }
   }),
-  async (req, res, next) => {
-    try {
-      const developer = await Developer.create({
-        email: req.body.email,
-        name: req.body.name,
-        password: bcrypt.hashSync(req.body.password, 10)
-      });
-      res.json(developer);
-    } catch (e) {
-      if (e.name === "SequelizeUniqueConstraintError") {
+  (req, res, next) => {
+    Developer.create({
+      email: req.body.email,
+      name: req.body.name,
+      password: bcrypt.hashSync(req.body.password, 10)
+    })
+      .then(({ id }) => {
+        return Developer.findByPk(id);
+      })
+      .then(developer => {
         res
-          .status(400)
-          .json({ error: "Developer with this email already exists" });
-      } else {
-        next(e);
-      }
-    }
+          .status(201)
+          .header("Location", `/developers/${developer.id}`)
+          .json({
+            developer,
+            jwt: toJWT({ id: developer.id })
+          });
+      })
+      .catch(e => {
+        if (e.name === "SequelizeUniqueConstraintError") {
+          res
+            .status(400)
+            .json({ error: "Developer with this email already exists" });
+        } else {
+          throw e;
+        }
+      })
+      .catch(next);
   }
 );
 
@@ -48,30 +59,29 @@ router.post(
       password: Joi.string().required()
     }
   }),
-  async (req, res, next) => {
-    try {
-      const developer = await Developer.findOne({
+  (req, res, next) => {
+    Developer.unscoped()
+      .findOne({
         where: {
           email: req.body.email
         }
-      });
-
-      if (!developer) {
-        res.status(400).send({
-          error: "Developer with this email does not exist"
-        });
-      } else if (!bcrypt.compareSync(req.body.password, developer.password)) {
-        res.status(400).send({
-          error: "Password incorrect"
-        });
-      } else {
-        res.json({
-          jwt: toJWT({ id: developer.id })
-        });
-      }
-    } catch (e) {
-      next(e);
-    }
+      })
+      .then(developer => {
+        if (!developer) {
+          res.status(400).send({
+            error: "Developer with this email does not exist"
+          });
+        } else if (!bcrypt.compareSync(req.body.password, developer.password)) {
+          res.status(400).send({
+            error: "Password incorrect"
+          });
+        } else {
+          res.json({
+            jwt: toJWT({ id: developer.id })
+          });
+        }
+      })
+      .catch(next);
   }
 );
 
