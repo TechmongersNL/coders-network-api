@@ -29,13 +29,13 @@ router.post(
       .then(({ id }) => {
         return Developer.findByPk(id);
       })
-      .then(developer => {
+      .then(me => {
         res
           .status(201)
-          .header("Location", `/developers/${developer.id}`)
+          .header("Location", `/developers/${me.id}`)
           .json({
-            developer,
-            jwt: toJWT({ id: developer.id })
+            me,
+            jwt: toJWT({ id: me.id })
           });
       })
       .catch(e => {
@@ -76,9 +76,14 @@ router.post(
             error: "Password incorrect"
           });
         } else {
-          res.json({
-            jwt: toJWT({ id: developer.id })
-          });
+          Developer.findByPk(developer.id)
+            .then(me => {
+              res.json({
+                me,
+                jwt: toJWT({ id: developer.id })
+              });
+            })
+            .catch(next);
         }
       })
       .catch(next);

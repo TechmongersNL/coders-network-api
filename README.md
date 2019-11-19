@@ -87,7 +87,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
   ```ts
   {
-    developer: Developer;
+    me: Developer;
     jwt: string;
   }
   ```
@@ -121,6 +121,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
   ```ts
   {
+    me: Developer;
     jwt: string;
   }
   ```
