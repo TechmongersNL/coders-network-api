@@ -1,6 +1,7 @@
 # The Codaisseur Coders Network API
 
-[http://codaisseur-coders-network.herokuapp.com/](http://codaisseur-coders-network.herokuapp.com/)
+- The API: [http://codaisseur-coders-network.herokuapp.com/](http://codaisseur-coders-network.herokuapp.com/)
+- The code: [https://github.com/Codaisseur/codaisseur-coders-network](https://github.com/Codaisseur/codaisseur-coders-network)
 
 ## Introduction
 
@@ -33,6 +34,10 @@ _The simplest endpoint of all, just to see if everything's still working._
     message: "Hello world!";
   }
   ```
+
+### Howto
+
+We've documented all the available endpoints below. Each endpoint has two examples, one that you can use with [HTTPie](https://httpie.org/) in your terminal, and one that you can use directly in your DevTools.
 
 ### Entity types
 
@@ -267,7 +272,7 @@ _This is an authenticated API endpoint. The new comment is made in the name of t
 
 - HTTPie:
 
-  `http -v POST :5000/posts/1/comments text="Love it!"`
+  `http -v POST :5000/posts/1/comments Authorization:"Bearer JWT" text="Love it!"`
 
 - JavaScript:
 
