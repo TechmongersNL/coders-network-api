@@ -4,7 +4,7 @@
 
 ## Introduction
 
-The Codaisseur Coders Network API is just a simple REST API. Sadly, it does not have a UI yet. Will you help use make it? :)
+The Codaisseur Coders Network API is just a simple REST API. Sadly, it does not have a UI yet. Will you help us make it? :)
 
 ### Hello world
 
