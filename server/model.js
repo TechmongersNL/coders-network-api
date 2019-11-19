@@ -5,6 +5,20 @@ const db = new Sequelize(
     "postgres://postgres:secret@localhost:5432/postgres"
 );
 
+const Technology = db.define(
+  "technology",
+  {
+    title: {
+      type: Sequelize.STRING,
+      allowNull: false
+    }
+  },
+  {
+    underscored: true,
+    timestamps: false
+  }
+);
+
 const PostTag = db.define(
   "post_tag",
   {
@@ -37,58 +51,25 @@ const Tag = db.define(
   }
 );
 
-const Post = db.define(
-  "post",
+const PostLike = db.define(
+  "post_like",
   {
-    title: {
-      type: Sequelize.STRING,
-      allowNull: false
+    developer_id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true
     },
-    content: {
-      type: Sequelize.TEXT,
-      defaultValue: ""
+    post_id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true
     }
   },
   {
     underscored: true,
     defaultScope: {
-      include: [
-        {
-          model: Tag,
-          through: { attributes: [] }
-        }
-      ],
       attributes: {
-        exclude: ["content"]
-      }
-    },
-    scopes: {
-      full: {
-        include: [
-          {
-            model: Tag,
-            through: { attributes: [] }
-          }
-        ],
-        attributes: {
-          include: ["content"]
-        }
+        exclude: ["post_id", "developer_id"]
       }
     }
-  }
-);
-
-const Technology = db.define(
-  "technology",
-  {
-    title: {
-      type: Sequelize.STRING,
-      allowNull: false
-    }
-  },
-  {
-    underscored: true,
-    timestamps: false
   }
 );
 
@@ -122,23 +103,99 @@ const Developer = db.define(
         }
       ],
       attributes: { exclude: ["password", "updatedAt"] }
+    },
+    scopes: {
+      slim: {
+        attributes: {
+          include: ["name"]
+        }
+      }
+    }
+  }
+);
+
+const Post = db.define(
+  "post",
+  {
+    title: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    content: {
+      type: Sequelize.TEXT,
+      defaultValue: ""
+    }
+  },
+  {
+    underscored: true,
+    defaultScope: {
+      include: [
+        {
+          model: Tag,
+          through: { attributes: [] }
+        },
+        {
+          model: PostLike,
+          include: [
+            {
+              model: Developer.scope("slim"),
+              attributes: ["name"]
+            }
+          ]
+        }
+      ],
+      attributes: {
+        exclude: ["content"]
+      }
+    },
+    scopes: {
+      full: {
+        include: [
+          {
+            model: Tag,
+            through: { attributes: [] }
+          },
+          {
+            model: PostLike,
+            include: [
+              {
+                model: Developer.scope("slim"),
+                attributes: ["name"]
+              }
+            ]
+          }
+        ],
+        attributes: {
+          include: ["content"]
+        }
+      }
     }
   }
 );
 
 Developer.hasMany(Post, {
-  foreignKey: "authorId"
+  foreignKey: "author_id"
 });
 Post.belongsTo(Developer, {
-  foreignKey: "authorId"
+  foreignKey: "author_id"
 });
 
 Post.belongsToMany(Tag, { through: PostTag, foreignKey: "post_id" });
 Tag.belongsToMany(Post, { through: PostTag, foreignKey: "tag_id" });
+
+Post.hasMany(PostLike, {
+  foreignKey: "post_id"
+});
+// PostLike.belongsTo(Post, {
+//   foreignKey: "post_id"
+// });
+PostLike.belongsTo(Developer, {
+  foreignKey: "developer_id"
+});
 
 Developer.belongsToMany(Technology, {
   through: "favorite_technologies"
 });
 Technology.belongsToMany(Developer, { through: "favorite_technologies" });
 
-module.exports = { db, Developer, Post, Tag, PostTag, Technology };
+module.exports = { db, Developer, PostLike, Post, Tag, PostTag, Technology };

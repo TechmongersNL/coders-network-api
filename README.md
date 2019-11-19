@@ -172,6 +172,68 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
   `Post`
 
+### Like a post
+
+_This is an authenticated API endpoint._
+
+- HTTPie:
+
+  `http -v POST :5000/posts/1/likes Authorization:"Bearer JWT"`
+
+- JavaScript:
+
+  ```js
+  fetch(`http://localhost:5000/posts/1/likes`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer JWT`
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("DONE", data);
+    });
+  ```
+
+- Response:
+
+  ```ts
+  {
+    ok: true;
+  }
+  ```
+
+### Unlike a post
+
+_This is an authenticated API endpoint._
+
+- HTTPie:
+
+  `http -v DELETE :5000/posts/1/likes Authorization:"Bearer JWT"`
+
+- JavaScript:
+
+  ```js
+  fetch(`http://localhost:5000/posts/1/likes`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer JWT`
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("DONE", data);
+    });
+  ```
+
+- Response:
+
+  ```ts
+  {
+    ok: true;
+  }
+  ```
+
 ### Get a list of posts
 
 _Paginated with the optional `offset` and `limit` query parameters._

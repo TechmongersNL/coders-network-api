@@ -17,7 +17,7 @@ function findDeveloper(req, res, next) {
   })
     .then(developer => {
       if (!developer) {
-        res.status(400).json({ error: "Developer does not exist" });
+        res.status(404).json({ error: "Developer does not exist" });
       } else {
         req.developer = developer;
         next();
@@ -27,7 +27,6 @@ function findDeveloper(req, res, next) {
 }
 
 function mustBeMe(req, res, next) {
-  console.log(req.user, req.developer);
   if (req.user.id !== req.developer.id) {
     res.status(401).json({ error: "Not allowed" });
   } else {

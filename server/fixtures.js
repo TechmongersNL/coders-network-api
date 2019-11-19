@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { stripIndent } = require("common-tags");
-const { Developer, Post, Tag, Technology } = require("./model");
+const { PostLike, Developer, Post, Tag, Technology } = require("./model");
 
 module.exports = async function() {
   const [kelley, rein, matias] = await Promise.all(
@@ -59,7 +59,7 @@ module.exports = async function() {
   const [onEquality, onGitHub, onRerendering] = await Promise.all(
     [
       {
-        authorId: kelley.id,
+        author_id: kelley.id,
         title: "A helper hook to remember values by deep equality",
         content: stripIndent`
           So of course every React hook enthusiast will have had a use-case for a deep (structural) equality check on the dependencies argument, at a certain point in time. Instead of crafting these things every time you need them, or importing a helper library, here's a wonderfully simple helper hook to help you out:
@@ -87,14 +87,14 @@ module.exports = async function() {
         `
       },
       {
-        authorId: rein.id,
+        author_id: rein.id,
         title: "Clean up your GitHub profile!",
         content: stripIndent`
           Cleaning up your GitHub profile, and writing good commit messages, can show your future employees that you're a good team player!
         `
       },
       {
-        authorId: kelley.id,
+        author_id: kelley.id,
         title: "Do components rerender if nested in a useMemo render? (yes)",
         content: stripIndent`
           **Yes, they do (of course).**
@@ -122,6 +122,12 @@ module.exports = async function() {
   await rein.addTechnologies([
     technologies.JavaScript,
     technologies["Learning strategies"]
+  ]);
+
+  await PostLike.bulkCreate([
+    { post_id: onRerendering.id, developer_id: rein.id },
+    { post_id: onGitHub.id, developer_id: kelley.id },
+    { post_id: onGitHub.id, developer_id: rein.id }
   ]);
 
   console.log("Fixtures in place");
