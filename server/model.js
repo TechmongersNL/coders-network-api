@@ -107,7 +107,7 @@ const Developer = db.define(
     scopes: {
       slim: {
         attributes: {
-          include: ["name"]
+          include: ["id", "name", "email"]
         }
       }
     }
@@ -139,7 +139,7 @@ const Post = db.define(
           include: [
             {
               model: Developer.scope("slim"),
-              attributes: ["name"]
+              attributes: ["id", "name", "email"]
             }
           ]
         }
@@ -160,7 +160,7 @@ const Post = db.define(
             include: [
               {
                 model: Developer.scope("slim"),
-                attributes: ["name"]
+                attributes: ["id", "name", "email"]
               }
             ]
           }
@@ -168,6 +168,30 @@ const Post = db.define(
         attributes: {
           include: ["content"]
         }
+      }
+    }
+  }
+);
+
+const Comment = db.define(
+  "comment",
+  {
+    text: {
+      type: Sequelize.TEXT,
+      defaultValue: ""
+    }
+  },
+  {
+    underscored: true,
+    defaultScope: {
+      include: [
+        {
+          model: Developer.scope("slim"),
+          attributes: ["id", "name", "email"]
+        }
+      ],
+      attributes: {
+        exclude: ["developer_id", "post_id"]
       }
     }
   }
@@ -193,9 +217,28 @@ PostLike.belongsTo(Developer, {
   foreignKey: "developer_id"
 });
 
+Post.hasMany(Comment, {
+  foreignKey: "post_id"
+});
+Comment.belongsTo(Developer, {
+  foreignKey: "developer_id"
+});
+Comment.belongsTo(Post, {
+  foreignKey: "post_id"
+});
+
 Developer.belongsToMany(Technology, {
   through: "favorite_technologies"
 });
 Technology.belongsToMany(Developer, { through: "favorite_technologies" });
 
-module.exports = { db, Developer, PostLike, Post, Tag, PostTag, Technology };
+module.exports = {
+  db,
+  Developer,
+  PostLike,
+  Comment,
+  Post,
+  Tag,
+  PostTag,
+  Technology
+};

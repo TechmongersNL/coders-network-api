@@ -234,6 +234,64 @@ _This is an authenticated API endpoint._
   }
   ```
 
+### Get a post's comments
+
+- [Example](/posts/1/comments)
+
+- HTTPie:
+
+  `http -v GET :5000/posts/1/comments`
+
+- JavaScript:
+
+  ```js
+  fetch(`http://localhost:5000/posts/1/comments`)
+    .then(res => res.json())
+    .then(data => {
+      console.log("DONE", data);
+    });
+  ```
+
+- Response:
+
+  ```ts
+  {
+    count: number;
+    rows: Comment[];
+  }
+  ```
+
+### Add a comment
+
+_This is an authenticated API endpoint. The new comment is made in the name of the user currently logged in._
+
+- HTTPie:
+
+  `http -v POST :5000/posts/1/comments text="Love it!"`
+
+- JavaScript:
+
+  ```js
+  fetch(`http://localhost:5000/posts/1/comments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer JWT`
+    },
+    body: JSON.stringify({
+      text: "Love it!"
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("DONE", data);
+    });
+  ```
+
+- Response:
+
+  `Comment`
+
 ### Get a list of posts
 
 _Paginated with the optional `offset` and `limit` query parameters._

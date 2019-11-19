@@ -22,9 +22,9 @@ marked.setOptions({
 const app = express();
 
 app.use(express.static(__dirname + "/../public"));
+app.use(cors());
 app.use(bodyParser());
 app.use(cookieParser());
-app.use(cors());
 
 app.get("/", (req, res, next) => {
   fs.readFile(__dirname + "/../README.md", "utf8", (err, md) => {

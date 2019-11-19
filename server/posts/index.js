@@ -4,7 +4,7 @@ const validate = require("express-validation");
 const Joi = require("joi");
 
 const mustBeAuthenticated = require("../auth/mustBeAuthenticated");
-const { Developer, Post, Tag, PostLike } = require("../model");
+const { Comment, Developer, Post, Tag, PostLike } = require("../model");
 
 const router = new Router();
 
@@ -164,6 +164,50 @@ router.delete(
       .catch(next);
   }
 );
+
+// CREATE COMMENT
+router.post(
+  "/posts/:id/comments",
+  mustBeAuthenticated,
+  findPost,
+  validate({
+    body: {
+      text: Joi.string().required()
+    }
+  }),
+  (req, res, next) => {
+    Comment.create({
+      post_id: req.post.id,
+      developer_id: req.user.id,
+      text: req.body.text
+    })
+      .then(({ id }) => Comment.findByPk(id))
+      .then(comment => {
+        if (!comment) {
+          req.status(500).json({ error: "Unknown weird error!" });
+        } else {
+          res
+            .status(201)
+            .header("Location", `/posts/${req.post.id}/comments/${comment.id}`)
+            .json(comment);
+        }
+      })
+      .catch(next);
+  }
+);
+
+// READ COMMENTS
+router.get("/posts/:id/comments", findPost, (req, res, next) => {
+  Comment.findAndCountAll({
+    where: {
+      post_id: req.post.id
+    }
+  })
+    .then(comments => {
+      res.json(comments);
+    })
+    .catch(next);
+});
 
 // DELETE
 router.delete(
