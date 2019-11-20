@@ -72,7 +72,7 @@ router.post(
             error: "Developer with this email does not exist"
           });
         } else if (!bcrypt.compareSync(req.body.password, developer.password)) {
-          res.status(400).send({
+          res.status(401).send({
             error: "Password incorrect"
           });
         } else {

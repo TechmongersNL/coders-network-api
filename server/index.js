@@ -50,6 +50,34 @@ app.get("/", (req, res, next) => {
             <div class="readme markdown-body">
               ${marked(md)}
             </div>
+            <script>
+            function api(endpoint, { method = "GET", body, jwt } = {}) {
+              return fetch(
+                api.url + endpoint,
+                {
+                  method: method,
+                  headers: {
+                    Authorization: "Bearer " + jwt,
+                    "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify(body)
+                }
+              )
+                .catch(network_error => {
+                  throw { network_error };
+                })
+                .then(response => {
+                  return response.json().then(data => {
+                    if (response.status >= 400) {
+                      throw { api_error: data };
+                    } else {
+                      return data;
+                    }
+                  });
+                });
+            }
+            api.url = "https://codaisseur-coders-network.herokuapp.com";
+            </script>
           </body>
         </html>
       `);
