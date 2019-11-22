@@ -4,6 +4,7 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 
 const { Developer } = require("../model");
+const mustBeAuthenticated = require("./mustBeAuthenticated");
 
 const { toJWT } = require("./jwt");
 
@@ -27,15 +28,11 @@ router.post(
       password: bcrypt.hashSync(req.body.password, 10)
     })
       .then(({ id }) => {
-        return Developer.findByPk(id);
-      })
-      .then(me => {
         res
           .status(201)
-          .header("Location", `/developers/${me.id}`)
+          .header("Location", `/developers/${id}`)
           .json({
-            me,
-            jwt: toJWT({ id: me.id })
+            jwt: toJWT({ id })
           });
       })
       .catch(e => {
@@ -76,18 +73,17 @@ router.post(
             error: "Password incorrect"
           });
         } else {
-          Developer.findByPk(developer.id)
-            .then(me => {
-              res.json({
-                me,
-                jwt: toJWT({ id: developer.id })
-              });
-            })
-            .catch(next);
+          res.json({
+            jwt: toJWT({ id: developer.id })
+          });
         }
       })
       .catch(next);
   }
 );
+
+router.get("/me", mustBeAuthenticated, (req, res) => {
+  res.json(req.user);
+});
 
 module.exports = router;

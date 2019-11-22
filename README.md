@@ -39,17 +39,13 @@ We suggest you do one of these two things:
           body: JSON.stringify(body)
         }
       )
-        .catch(network_error => {
-          throw { network_error };
-        })
-        .then(response => {
-          return response.json().then(data => {
-            if (response.status >= 400) {
-              throw { api_error: data };
-            } else {
-              return data;
-            }
-          });
+        .then(response => Promise.all([response.status, response.json()]))
+        .then(([status, data]) => {
+          if (status >= 400) {
+            throw { api_error: data };
+          } else {
+            return data;
+          }
         });
     }
     ```
@@ -174,7 +170,8 @@ interface Comment {
 We use JSON Web Tokens for authentication. Some endpoints are authenticated, which means you can only get data from them if you're logged in.
 
 - To login, you want to `POST` to `/login` with your email and password, and then you get a JWT back.
-- To access an authenticated endpoint after you've logged in, you have to send the JWT along as a header. We have a simple test authenticated endpoint at `/authenticated`.
+- To access an authenticated endpoint after you've logged in, you have to send the JWT along as a header. We have a simple test authenticated endpoint at `/me`.
+- To start off, for testing purposes only, you can use the "fake" (and misformed) JWT `faketokenforkelley238765293`, which will always let you login as user #1.
 
 ### Signup `POST /signup`
 
@@ -201,7 +198,6 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
   ```ts
   {
-    me: Developer;
     jwt: string;
   }
   ```
@@ -230,32 +226,27 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
   ```ts
   {
-    me: Developer;
     jwt: string;
   }
   ```
 
-### Check whether authenticated `GET /authenticated`
+### Check whether authenticated / get own profile `GET /me`
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network.herokuapp.com/authenticated Authorization:"Bearer JWT"`
+  `http -v GET https://codaisseur-coders-network.herokuapp.com/me Authorization:"Bearer JWT"`
 
 - JavaScript:
 
   ```js
-  api("/authenticated", { jwt: "JWT" })
+  api("/me", { jwt: "JWT" })
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
 
 - Response:
 
-  ```ts
-  {
-    authenticated: true;
-  }
-  ```
+  `Developer`
 
 ## Posts
 

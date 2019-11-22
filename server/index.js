@@ -11,7 +11,6 @@ const { db } = require("./model");
 const authRouter = require("./auth");
 const developersRouter = require("./developers");
 const postsRouter = require("./posts");
-const mustBeAuthenticated = require("./auth/mustBeAuthenticated");
 
 marked.setOptions({
   highlight: function(code, lang) {
@@ -63,20 +62,16 @@ app.get("/", (req, res, next) => {
                   body: JSON.stringify(body)
                 }
               )
-                .catch(network_error => {
-                  throw { network_error };
-                })
-                .then(response => {
-                  return response.json().then(data => {
-                    if (response.status >= 400) {
-                      throw { api_error: data };
-                    } else {
-                      return data;
-                    }
-                  });
+                .then(response => Promise.all([response.status, response.json()]))
+                .then(([status, data]) => {
+                  if (status >= 400) {
+                    throw { api_error: data };
+                  } else {
+                    return data;
+                  }
                 });
             }
-            api.url = "https://codaisseur-coders-network.herokuapp.com";
+            api.url = window.location.origin;
             </script>
           </body>
         </html>
@@ -87,10 +82,6 @@ app.get("/", (req, res, next) => {
 
 app.get("/hello", (req, res) => {
   res.json({ message: "Hello world!" });
-});
-
-app.get("/authenticated", mustBeAuthenticated, (req, res) => {
-  res.json({ authenticated: true });
 });
 
 app.use(authRouter);
