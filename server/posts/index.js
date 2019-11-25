@@ -75,16 +75,20 @@ router.get(
     query: {
       limit: Joi.number(),
       offset: Joi.number(),
-      tag: Joi.string()
+      tag: Joi.string(),
+      developer: Joi.number()
     }
   }),
   (req, res, next) => {
-    const { limit = 10, offset = 0 } = req.query;
+    const { limit = 10, offset = 0, author: author_id } = req.query;
+
+    const where = author_id ? { author_id } : undefined;
 
     Post.scope("full")
       .findAndCountAll({
         limit,
         offset,
+        where,
         // TODO: this is actually duplicated a bit with the schema..
         include: [
           req.query.tag

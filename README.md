@@ -399,7 +399,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
   }
   ```
 
-### Get a list of posts (by tag) `GET /posts?tag`
+### Get a list of posts (by tag) `GET /posts?tag=XYZ`
 
 _Paginated with the optional `offset` and `limit` query parameters._
 
@@ -407,12 +407,39 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network.herokuapp.com/posts?tag=react"`
+  `http -v GET "https://codaisseur-coders-network.herokuapp.com/posts?tag=github"`
 
 - JavaScript:
 
   ```js
-  api(`/posts?tag=react`)
+  api(`/posts?tag=github`)
+    .then(data => console.log("data", data))
+    .catch(err => console.log("err", err));
+  ```
+
+- Response:
+
+  ```ts
+  {
+    count: number;
+    rows: Post[];
+  }
+  ```
+
+### Get a list of posts (by author) `GET /posts?author=ID`
+
+_Paginated with the optional `offset` and `limit` query parameters._
+
+- [Example](/posts?author=1)
+
+- HTTPie:
+
+  `http -v GET "https://codaisseur-coders-network.herokuapp.com/posts?author=1"`
+
+- JavaScript:
+
+  ```js
+  api(`/posts?author=2`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
