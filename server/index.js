@@ -84,6 +84,14 @@ app.get("/hello", (req, res) => {
   res.json({ message: "Hello world!" });
 });
 
+app.post("/fixturize", async (req, res) => {
+  await db.sync({ force: true });
+  const place_fixtures = require("./fixtures");
+  place_fixtures();
+
+  res.json({ message: "Fixtures in place!" });
+});
+
 app.use(authRouter);
 app.use(developersRouter);
 app.use(postsRouter);

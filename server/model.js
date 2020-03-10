@@ -210,9 +210,9 @@ Tag.belongsToMany(Post, { through: PostTag, foreignKey: "tag_id" });
 Post.hasMany(PostLike, {
   foreignKey: "post_id"
 });
-// PostLike.belongsTo(Post, {
-//   foreignKey: "post_id"
-// });
+PostLike.belongsTo(Post, {
+  foreignKey: "post_id"
+});
 PostLike.belongsTo(Developer, {
   foreignKey: "developer_id"
 });

@@ -89,6 +89,7 @@ router.get(
         limit,
         offset,
         where,
+        order: [["createdAt", "DESC"]],
         // TODO: this is actually duplicated a bit with the schema..
         include: [
           req.query.tag
