@@ -7,20 +7,11 @@
 
 The Codaisseur Coders Network API is just a simple REST API. Sadly, it does not have a UI yet. Will you help us make it? :)
 
-### Howto
+### How-to
 
 We've documented all the available endpoints below. Each endpoint has two examples, one that you can use with [HTTPie](https://httpie.org/) in your terminal, and one that you can use directly in your DevTools. We encourage you to do this!
 
-### A note on using fetch
-
-When you do an API call, that is, a network request to one of the API endpoints below, this can lead to multiple types of errors:
-
-1. A network error, in which case making the request in the first place did not work.
-2. An "interesting" API error, which in itself is a successful request, except the API is not happy (or broken). In this case, you typically get an HTTP response status in the 400 range (your fault) or the 500 range (the API's fault).
-
-For instance, if you try to log in with the wrong password, situation (2) occurs, and you get a 401 "Unauthorized" response. In this API's case accompanied with the JSON body `{ "error": "Password incorrect" }`.
-
-If you use `axios`, which gives you back a `Promise`, you can attach a _success handler_ with `.then` and an _error handler_ with `.catch`. But, situation (2) is not counted as an _error_ for `fetch`, because the request in itself was successful. So, the "interesting" API errors actually get passed to your `.then` success handler. The same goes when using the `async/await` syntax with a `try/catch` block.
+### Making requests
 
 We recommend you use `axios` to make your requests. Some request examples are:
 
@@ -55,7 +46,7 @@ const response = await axios.post(
 );
 ```
 
-If we want to avoid having to repeat the first part of the URL many times (what is called the `baseURL`) we can create a preconfigured axios instance. To do this you can create an `axios.js` file, maybe inside the `/store` folder in your frontend. In this file you can do the following:
+If we want to avoid having to repeat the first part of the URL many times (what is sometimes called the `baseURL`) we can create a preconfigured axios instance. To do this you can create an `axios.js` file, maybe inside the `/store` folder in your frontend. In this file you can do the following:
 
 ```js
 // /src/store/axios.js
