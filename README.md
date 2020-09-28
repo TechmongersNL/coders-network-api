@@ -20,64 +20,66 @@ When you do an API call, that is, a network request to one of the API endpoints 
 
 For instance, if you try to log in with the wrong password, situation (2) occurs, and you get a 401 "Unauthorized" response. In this API's case accompanied with the JSON body `{ "error": "Password incorrect" }`.
 
-If you use `fetch`, which gives you back a `Promise`, you can attach a _success handler_ with `.then` and an _error handler_ with `.catch`. But, situation (2) is not counted as an _error_ for `fetch`, because the request in itself was successful. So, the "interesting" API errors actually get passed to your `.then` success handler.
+If you use `axios`, which gives you back a `Promise`, you can attach a _success handler_ with `.then` and an _error handler_ with `.catch`. But, situation (2) is not counted as an _error_ for `fetch`, because the request in itself was successful. So, the "interesting" API errors actually get passed to your `.then` success handler. The same goes when using the `async/await` syntax with a `try/catch` block.
 
-We suggest you do one of these two things:
+We recommend you use `axios` to make your requests. Some request examples are:
 
-1.  Use this function to do the API calls:
+```js
+// inside an async function
+try {
+  // Simple GET request
+  const response = await axios.get(
+    "https://codaisseur-coders-network.herokuapp.com/hello"
+  );
+  console.log(response.data);
+} catch (error) {
+  console.log(error.message);
+}
 
-    ```js
-    function api(endpoint, { method = "GET", body, jwt } = {}) {
-      return fetch(
-        "https://codaisseur-coders-network.herokuapp.com" + endpoint,
-        {
-          method: method,
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(body)
-        }
-      )
-        .then(response => Promise.all([response.status, response.json()]))
-        .then(([status, data]) => {
-          if (status >= 400) {
-            throw { api_error: data };
-          } else {
-            return data;
-          }
-        });
-    }
-    ```
+// All these should also be wrapped in async functions and try/catch blocks:
+// POST request
+const response = await axios.post(
+  "https://codaisseur-coders-network.herokuapp.com/login",
+  { email: "some@email.com", password: "somepassword" } // these are the body parameters
+);
 
-    The `api` function gives you back a `Promise`, just like `fetch` does. Except that it throws an error in the case of an API error as well. In the case of an API error, it throws an error object like this: `{ api_error: { error: "Password incorrect" } }`.
+// Authorized post request
+const response = await axios.post(
+  "https://codaisseur-coders-network.herokuapp.com/posts",
+  { title: "My new post", content: "lorem ipsum" },
+  {
+    headers: {
+      Authorization: "Bearer <yourJWTtoken>", // Setting the JWT header
+    },
+  }
+);
+```
 
-    For example:
+If we want to avoid having to repeat the first part of the URL many times (what is called the `baseURL`) we can create a preconfigured axios instance. To do this you can create an `axios.js` file, maybe inside the `/store` folder in your frontend. In this file you can do the following:
 
-    ```js
-    // A normal GET request (in which fetch is good enough, but this is still easier)
-    api("/developers")
-      .then(data => console.log("data", data))
-      .catch(err => console.log("err", err));
+```js
+// /src/store/axios.js
+import axios from "axios";
 
-    // A POST request that might give an "interesting" 401 Unauthenticated API response
-    api("/login", {
-      method: "POST",
-      body: {
-        email: "kelley@codaisseur.com",
-        password: "abcdef"
-      }
-    })
-      .then(data => console.log("data", data))
-      .catch(err => console.log("err", err));
+export default axios.create({
+  baseURL: "https://codaisseur-coders-network.herokuapp.com",
+});
+```
 
-    // An authorized API call
-    api("/posts/1", { method: "PUT", body: { title: "Bla" }, jwt: "JWT" })
-      .then(data => console.log("data", data))
-      .catch(err => console.log("err", err));
-    ```
+Then from another file (like the actions files):
 
-2.  Use a small helper library like `axios` or `superagent`
+```js
+import axios from "../axios"; // Import axios from our file, not the library
+
+export const fetchPosts = () => async (dispatch, getState) => {
+  try {
+    const response = await axios.get("/posts");
+    console.log(response.data);
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+```
 
 ### Hello world
 
@@ -92,8 +94,9 @@ _The simplest endpoint of all, just to see if everything's still working._
 - JavaScript:
 
   ```js
-  api("/hello")
-    .then(data => console.log("data", data))
+  axios
+    .get("https://codaisseur-coders-network.herokuapp.com/hello")
+    .then(response => console.log("data", response.data))
     .catch(err => console.log("err", err));
   ```
 
@@ -182,14 +185,12 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 - JavaScript:
 
   ```js
-  api("/signup", {
-    method: "POST",
-    body: {
+  axios
+    .post("/signup", {
       name: "Kelley van Evert",
       email: "kelley@codaisseur.com",
-      password: "abcd"
-    }
-  })
+      password: "abcd",
+    })
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -211,13 +212,11 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 - JavaScript:
 
   ```js
-  api("/login", {
-    method: "POST",
-    body: {
+  axios
+    .post("/login", {
       email: "kelley@codaisseur.com",
-      password: "abcd"
-    }
-  })
+      password: "abcd",
+    })
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -239,7 +238,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 - JavaScript:
 
   ```js
-  api("/me", { jwt: "JWT" })
+  axios
+    .get("/me", { headers: { Authorization: "Bearer <yourJWTtoken>" } })
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -261,7 +261,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 - JavaScript:
 
   ```js
-  api(`/posts/1`)
+  axios
+    .get(`/posts/1`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -281,7 +282,12 @@ _This is an authenticated API endpoint._
 - JavaScript:
 
   ```js
-  api(`/posts/1/likes`, { method: "POST", jwt: "JWT" })
+  axios
+    .post(
+      `/posts/1/likes`,
+      {}, // empty body object, no body parameters are sent.
+      { headers: { Authorization: "Bearer <yourJWTtoken>" } }
+    )
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -305,10 +311,10 @@ _This is an authenticated API endpoint._
 - JavaScript:
 
   ```js
-  api(`/posts/1/likes`, {
-    method: "DELETE",
-    jwt: "JWT"
-  })
+  axios
+    .delete(`/posts/1/likes`, {
+      headers: { Authorization: "Bearer <yourJWTtoken>" },
+    })
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -332,7 +338,8 @@ _This is an authenticated API endpoint._
 - JavaScript:
 
   ```js
-  api(`/posts/1/comments`)
+  axios
+    .get(`/posts/1/comments`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -357,13 +364,18 @@ _This is an authenticated API endpoint. The new comment is made in the name of t
 - JavaScript:
 
   ```js
-  api(`/posts/1/comments`, {
-    method: "POST",
-    body: {
-      text: "Love it!"
-    },
-    jwt: "JWT"
-  })
+  axios
+    .post(
+      `/posts/1/comments`,
+      {
+        text: "Love it!",
+      },
+      {
+        headers: {
+          Authorization: "Bearer <yourJWTtoken>",
+        },
+      }
+    )
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -385,7 +397,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
 - JavaScript:
 
   ```js
-  api(`/posts?offset=1&limit=2`)
+  axios
+    .get(`/posts?offset=1&limit=2`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -412,7 +425,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
 - JavaScript:
 
   ```js
-  api(`/posts?tag=github`)
+  axios
+    .get(`/posts?tag=github`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -439,7 +453,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
 - JavaScript:
 
   ```js
-  api(`/posts?author=2`)
+  axios
+    .get(`/posts?author=2`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -464,14 +479,17 @@ _This is an authenticated API endpoint. The new post is made in the name of the 
 - JavaScript:
 
   ```js
-  api("/posts", {
-    method: "POST",
-    body: {
-      title: "ABC",
-      content: "bla bla bla"
-    },
-    jwt: "JWT"
-  })
+  axios
+    .post(
+      "/posts",
+      {
+        title: "ABC",
+        content: "bla bla bla",
+      },
+      {
+        headers: { Authorization: "Bearer <yourJWTtoken>" },
+      }
+    )
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -493,13 +511,16 @@ _You don't have to send all post fields. Only the included fields will be update
 - JavaScript:
 
   ```js
-  api("/posts/1", {
-    method: "PUT",
-    body: {
-      title: "DEF"
-    },
-    jwt: "JWT"
-  })
+  axios
+    .put(
+      "/posts/1",
+      {
+        title: "DEF",
+      },
+      {
+        headers: { Authorization: "Bearer <yourJWTtoken>" },
+      }
+    )
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -519,10 +540,10 @@ _This is an authenticated API endpoint. The post must be owned by the user curre
 - JavaScript:
 
   ```js
-  api("/posts/1", {
-    method: "DELETE",
-    jwt: "JWT"
-  })
+  axios
+    .delete("/posts/1", {
+      headers: { Authorization: "Bearer <yourJWTtoken>" },
+    })
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -552,7 +573,8 @@ _Refer to the [`/signup`](#signup) endpoint above._
 - JavaScript:
 
   ```js
-  api(`/developers/1`)
+  axios
+    .get(`/developers/1`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -574,7 +596,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
 - JavaScript:
 
   ```js
-  api(`/developers?offset=1&limit=2`)
+  axios
+    .get(`/developers?offset=1&limit=2`)
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -599,14 +622,17 @@ _This is an authenticated API endpoint. You can of course only edit your own pro
 - JavaScript:
 
   ```js
-  api(`/developers/1`, {
-    method: "PUT",
-    body: {
-      name: "Bla",
-      github_username: "blabla"
-    },
-    jwt: "JWT"
-  })
+  axios
+    .put(
+      `/developers/1`,
+      {
+        name: "Bla",
+        github_username: "blabla",
+      },
+      {
+        headers: { Authorization: "Bearer <yourJWTtoken>" },
+      }
+    )
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
@@ -626,10 +652,10 @@ _This is an authenticated API endpoint. You can of course only delete your own a
 - JavaScript:
 
   ```js
-  api(`/developers/1`, {
-    method: "DELETE",
-    jwt: "JWT"
-  })
+  axios
+    .delete(`/developers/1`, {
+      headers: { Authorization: "Bearer <yourJWTtoken>" },
+    })
     .then(data => console.log("data", data))
     .catch(err => console.log("err", err));
   ```
