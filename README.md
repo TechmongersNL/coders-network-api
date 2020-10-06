@@ -1,7 +1,7 @@
 # The Codaisseur Coders Network API
 
-- The API: [https://codaisseur-coders-network.herokuapp.com/](https://codaisseur-coders-network.herokuapp.com/)
-- The code: [https://github.com/Codaisseur/codaisseur-coders-network](https://github.com/Codaisseur/codaisseur-coders-network)
+- The API: [https://codaisseur-coders-network-okta.herokuapp.com/](https://codaisseur-coders-network-okta.herokuapp.com/)
+- The code: [https://github.com/Codaisseur/codaisseur-coders-network/tree/okta](https://github.com/Codaisseur/codaisseur-coders-network/tree/okta)
 
 ## Introduction
 
@@ -20,7 +20,7 @@ We recommend you use `axios` to make your requests. Some request examples are:
 try {
   // Simple GET request
   const response = await axios.get(
-    "https://codaisseur-coders-network.herokuapp.com/hello"
+    "https://codaisseur-coders-network-okta.herokuapp.com/hello"
   );
   console.log(response.data);
 } catch (error) {
@@ -30,13 +30,13 @@ try {
 // All these should also be wrapped in async functions and try/catch blocks:
 // POST request
 const response = await axios.post(
-  "https://codaisseur-coders-network.herokuapp.com/login",
+  "https://codaisseur-coders-network-okta.herokuapp.com/login",
   { email: "some@email.com", password: "somepassword" } // these are the body parameters
 );
 
 // Authorized post request
 const response = await axios.post(
-  "https://codaisseur-coders-network.herokuapp.com/posts",
+  "https://codaisseur-coders-network-okta.herokuapp.com/posts",
   { title: "My new post", content: "lorem ipsum" },
   {
     headers: {
@@ -53,7 +53,7 @@ If we want to avoid having to repeat the first part of the URL many times (what 
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://codaisseur-coders-network.herokuapp.com",
+  baseURL: "https://codaisseur-coders-network-okta.herokuapp.com",
 });
 ```
 
@@ -80,15 +80,15 @@ _The simplest endpoint of all, just to see if everything's still working._
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network.herokuapp.com/hello`
+  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/hello`
 
 - JavaScript:
 
   ```js
   axios
-    .get("https://codaisseur-coders-network.herokuapp.com/hello")
-    .then(response => console.log("data", response.data))
-    .catch(err => console.log("err", err));
+    .get("https://codaisseur-coders-network-okta.herokuapp.com/hello")
+    .then((response) => console.log("data", response.data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -171,7 +171,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network.herokuapp.com/signup name="Kelley van Evert" email=kelley@codaisseur.com password=abcd`
+  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/signup name="Kelley van Evert" email=kelley@codaisseur.com password=abcd`
 
 - JavaScript:
 
@@ -182,8 +182,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
       email: "kelley@codaisseur.com",
       password: "abcd",
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -198,7 +198,7 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network.herokuapp.com/login email=kelley@codaisseur.com password=abcd`
+  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/login email=kelley@codaisseur.com password=abcd`
 
 - JavaScript:
 
@@ -208,8 +208,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
       email: "kelley@codaisseur.com",
       password: "abcd",
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -224,15 +224,15 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network.herokuapp.com/me Authorization:"Bearer JWT"`
+  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/me Authorization:"Bearer JWT"`
 
 - JavaScript:
 
   ```js
   axios
     .get("/me", { headers: { Authorization: "Bearer <yourJWTtoken>" } })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -247,15 +247,15 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network.herokuapp.com/posts/1`
+  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/posts/1`
 
 - JavaScript:
 
   ```js
   axios
     .get(`/posts/1`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -268,7 +268,7 @@ _This is an authenticated API endpoint._
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
+  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -279,8 +279,8 @@ _This is an authenticated API endpoint._
       {}, // empty body object, no body parameters are sent.
       { headers: { Authorization: "Bearer <yourJWTtoken>" } }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -297,7 +297,7 @@ _This is an authenticated API endpoint._
 
 - HTTPie:
 
-  `http -v DELETE https://codaisseur-coders-network.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
+  `http -v DELETE https://codaisseur-coders-network-okta.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -306,8 +306,8 @@ _This is an authenticated API endpoint._
     .delete(`/posts/1/likes`, {
       headers: { Authorization: "Bearer <yourJWTtoken>" },
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -324,15 +324,15 @@ _This is an authenticated API endpoint._
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network.herokuapp.com/posts/1/comments`
+  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/posts/1/comments`
 
 - JavaScript:
 
   ```js
   axios
     .get(`/posts/1/comments`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -350,7 +350,7 @@ _This is an authenticated API endpoint. The new comment is made in the name of t
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network.herokuapp.com/posts/1/comments Authorization:"Bearer JWT" text="Love it!"`
+  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/posts/1/comments Authorization:"Bearer JWT" text="Love it!"`
 
 - JavaScript:
 
@@ -367,8 +367,8 @@ _This is an authenticated API endpoint. The new comment is made in the name of t
         },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -383,15 +383,15 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network.herokuapp.com/posts?offset=1&limit=2"`
+  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/posts?offset=1&limit=2"`
 
 - JavaScript:
 
   ```js
   axios
     .get(`/posts?offset=1&limit=2`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -411,15 +411,15 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network.herokuapp.com/posts?tag=github"`
+  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/posts?tag=github"`
 
 - JavaScript:
 
   ```js
   axios
     .get(`/posts?tag=github`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -439,15 +439,15 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network.herokuapp.com/posts?author=1"`
+  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/posts?author=1"`
 
 - JavaScript:
 
   ```js
   axios
     .get(`/posts?author=2`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -465,7 +465,7 @@ _This is an authenticated API endpoint. The new post is made in the name of the 
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network.herokuapp.com/posts Authorization:"Bearer JWT" title="ABC" content="bla bla bla"`
+  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/posts Authorization:"Bearer JWT" title="ABC" content="bla bla bla"`
 
 - JavaScript:
 
@@ -481,8 +481,8 @@ _This is an authenticated API endpoint. The new post is made in the name of the 
         headers: { Authorization: "Bearer <yourJWTtoken>" },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -497,7 +497,7 @@ _You don't have to send all post fields. Only the included fields will be update
 
 - HTTPie:
 
-  `http -v PUT https://codaisseur-coders-network.herokuapp.com/posts Authorization:"Bearer JWT" title="DEF"`
+  `http -v PUT https://codaisseur-coders-network-okta.herokuapp.com/posts Authorization:"Bearer JWT" title="DEF"`
 
 - JavaScript:
 
@@ -512,8 +512,8 @@ _You don't have to send all post fields. Only the included fields will be update
         headers: { Authorization: "Bearer <yourJWTtoken>" },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -526,7 +526,7 @@ _This is an authenticated API endpoint. The post must be owned by the user curre
 
 - HTTPie:
 
-  `http -v DELETE https://codaisseur-coders-network.herokuapp.com/posts/1 Authorization:"Bearer JWT"`
+  `http -v DELETE https://codaisseur-coders-network-okta.herokuapp.com/posts/1 Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -535,8 +535,8 @@ _This is an authenticated API endpoint. The post must be owned by the user curre
     .delete("/posts/1", {
       headers: { Authorization: "Bearer <yourJWTtoken>" },
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -559,15 +559,15 @@ _Refer to the [`/signup`](#signup) endpoint above._
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network.herokuapp.com/developers/1`
+  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/developers/1`
 
 - JavaScript:
 
   ```js
   axios
     .get(`/developers/1`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -582,15 +582,15 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network.herokuapp.com/developers?offset=1&limit=2"`
+  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/developers?offset=1&limit=2"`
 
 - JavaScript:
 
   ```js
   axios
     .get(`/developers?offset=1&limit=2`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -608,7 +608,7 @@ _This is an authenticated API endpoint. You can of course only edit your own pro
 
 - HTTPie:
 
-  `http -v PUT https://codaisseur-coders-network.herokuapp.com/developers/1 Authorization:"Bearer JWT" name="Bla" github_username="blabla"`
+  `http -v PUT https://codaisseur-coders-network-okta.herokuapp.com/developers/1 Authorization:"Bearer JWT" name="Bla" github_username="blabla"`
 
 - JavaScript:
 
@@ -624,8 +624,8 @@ _This is an authenticated API endpoint. You can of course only edit your own pro
         headers: { Authorization: "Bearer <yourJWTtoken>" },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -638,7 +638,7 @@ _This is an authenticated API endpoint. You can of course only delete your own a
 
 - HTTPie:
 
-  `http -v DELETE https://codaisseur-coders-network.herokuapp.com/developers/1 Authorization:"Bearer JWT"`
+  `http -v DELETE https://codaisseur-coders-network-okta.herokuapp.com/developers/1 Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -647,8 +647,8 @@ _This is an authenticated API endpoint. You can of course only delete your own a
     .delete(`/developers/1`, {
       headers: { Authorization: "Bearer <yourJWTtoken>" },
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
