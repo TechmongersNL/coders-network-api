@@ -10,12 +10,12 @@ const Technology = db.define(
   {
     title: {
       type: Sequelize.STRING,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     underscored: true,
-    timestamps: false
+    timestamps: false,
   }
 );
 
@@ -24,16 +24,16 @@ const PostTag = db.define(
   {
     post_id: {
       type: Sequelize.INTEGER,
-      primaryKey: true
+      primaryKey: true,
     },
     tag_id: {
       type: Sequelize.INTEGER,
-      primaryKey: true
-    }
+      primaryKey: true,
+    },
   },
   {
     timestamps: false,
-    underscored: true
+    underscored: true,
   }
 );
 
@@ -42,12 +42,12 @@ const Tag = db.define(
   {
     tag: {
       type: Sequelize.STRING,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     timestamps: false,
-    underscored: true
+    underscored: true,
   }
 );
 
@@ -56,20 +56,20 @@ const PostLike = db.define(
   {
     developer_id: {
       type: Sequelize.INTEGER,
-      primaryKey: true
+      primaryKey: true,
     },
     post_id: {
       type: Sequelize.INTEGER,
-      primaryKey: true
-    }
+      primaryKey: true,
+    },
   },
   {
     underscored: true,
     defaultScope: {
       attributes: {
-        exclude: ["post_id", "developer_id"]
-      }
-    }
+        exclude: ["post_id", "developer_id"],
+      },
+    },
   }
 );
 
@@ -79,19 +79,15 @@ const Developer = db.define(
     email: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false
+      unique: true,
     },
     name: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     intro: Sequelize.TEXT,
     github_username: Sequelize.STRING,
-    website: Sequelize.STRING
+    website: Sequelize.STRING,
   },
   {
     underscored: true,
@@ -99,18 +95,18 @@ const Developer = db.define(
       include: [
         {
           model: Technology,
-          through: { attributes: [] }
-        }
+          through: { attributes: [] },
+        },
       ],
-      attributes: { exclude: ["password", "updatedAt"] }
+      attributes: { exclude: ["updatedAt"] },
     },
     scopes: {
       slim: {
         attributes: {
-          include: ["id", "name", "email"]
-        }
-      }
-    }
+          include: ["id", "name", "email"],
+        },
+      },
+    },
   }
 );
 
@@ -119,12 +115,12 @@ const Post = db.define(
   {
     title: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     content: {
       type: Sequelize.TEXT,
-      defaultValue: ""
-    }
+      defaultValue: "",
+    },
   },
   {
     underscored: true,
@@ -132,44 +128,44 @@ const Post = db.define(
       include: [
         {
           model: Tag,
-          through: { attributes: [] }
+          through: { attributes: [] },
         },
         {
           model: PostLike,
           include: [
             {
               model: Developer.scope("slim"),
-              attributes: ["id", "name", "email"]
-            }
-          ]
-        }
+              attributes: ["id", "name", "email"],
+            },
+          ],
+        },
       ],
       attributes: {
-        exclude: ["content"]
-      }
+        exclude: ["content"],
+      },
     },
     scopes: {
       full: {
         include: [
           {
             model: Tag,
-            through: { attributes: [] }
+            through: { attributes: [] },
           },
           {
             model: PostLike,
             include: [
               {
                 model: Developer.scope("slim"),
-                attributes: ["id", "name", "email"]
-              }
-            ]
-          }
+                attributes: ["id", "name", "email"],
+              },
+            ],
+          },
         ],
         attributes: {
-          include: ["content"]
-        }
-      }
-    }
+          include: ["content"],
+        },
+      },
+    },
   }
 );
 
@@ -178,8 +174,8 @@ const Comment = db.define(
   {
     text: {
       type: Sequelize.TEXT,
-      defaultValue: ""
-    }
+      defaultValue: "",
+    },
   },
   {
     underscored: true,
@@ -187,48 +183,48 @@ const Comment = db.define(
       include: [
         {
           model: Developer.scope("slim"),
-          attributes: ["id", "name", "email"]
-        }
+          attributes: ["id", "name", "email"],
+        },
       ],
       attributes: {
-        exclude: ["developer_id", "post_id"]
-      }
-    }
+        exclude: ["developer_id", "post_id"],
+      },
+    },
   }
 );
 
 Developer.hasMany(Post, {
-  foreignKey: "author_id"
+  foreignKey: "author_id",
 });
 Post.belongsTo(Developer, {
-  foreignKey: "author_id"
+  foreignKey: "author_id",
 });
 
 Post.belongsToMany(Tag, { through: PostTag, foreignKey: "post_id" });
 Tag.belongsToMany(Post, { through: PostTag, foreignKey: "tag_id" });
 
 Post.hasMany(PostLike, {
-  foreignKey: "post_id"
+  foreignKey: "post_id",
 });
 PostLike.belongsTo(Post, {
-  foreignKey: "post_id"
+  foreignKey: "post_id",
 });
 PostLike.belongsTo(Developer, {
-  foreignKey: "developer_id"
+  foreignKey: "developer_id",
 });
 
 Post.hasMany(Comment, {
-  foreignKey: "post_id"
+  foreignKey: "post_id",
 });
 Comment.belongsTo(Developer, {
-  foreignKey: "developer_id"
+  foreignKey: "developer_id",
 });
 Comment.belongsTo(Post, {
-  foreignKey: "post_id"
+  foreignKey: "post_id",
 });
 
 Developer.belongsToMany(Technology, {
-  through: "favorite_technologies"
+  through: "favorite_technologies",
 });
 Technology.belongsToMany(Developer, { through: "favorite_technologies" });
 
@@ -240,5 +236,5 @@ module.exports = {
   Post,
   Tag,
   PostTag,
-  Technology
+  Technology,
 };

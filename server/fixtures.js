@@ -7,10 +7,10 @@ const {
   Developer,
   Post,
   Tag,
-  Technology
+  Technology,
 } = require("./model");
 
-module.exports = async function() {
+module.exports = async function () {
   let date = moment();
 
   const [kelley, rein, matias] = await Promise.all(
@@ -18,25 +18,22 @@ module.exports = async function() {
       {
         name: "Kelley",
         email: "kelley@codaisseur.com",
-        password: bcrypt.hashSync("abcd", 10),
         intro: `Hi there! I'm Kelley, teacher of JavaScript, student of life`,
         github_username: "kelleyvanevert",
-        website: "https://hi-im-kelley.netlify.com/"
+        website: "https://hi-im-kelley.netlify.com/",
       },
       {
         name: "Rein",
         email: "rein@codaisseur.com",
-        password: bcrypt.hashSync("abcd", 10),
-        github_username: "Reinoptland"
+        github_username: "Reinoptland",
       },
       {
         name: "Matias",
         email: "matias@codaisseur.com",
-        password: bcrypt.hashSync("abcd", 10),
         intro: `Hi! I'm Matias, teacher of Codaisseur, from Uruguay!`,
-        github_username: "matiagarcia91"
-      }
-    ].map(d => Developer.create(d))
+        github_username: "matiagarcia91",
+      },
+    ].map((d) => Developer.create(d))
   );
 
   const technologies = Object.fromEntries(
@@ -48,12 +45,12 @@ module.exports = async function() {
           "Docker",
           "Functional Programming",
           "Promise.all",
-          "Learning strategies"
-        ].map(title => {
+          "Learning strategies",
+        ].map((title) => {
           return { title };
         })
       )
-    ).map(entity => [entity.title, entity.id])
+    ).map((entity) => [entity.title, entity.id])
   );
 
   const tags = Object.fromEntries(
@@ -67,12 +64,12 @@ module.exports = async function() {
           "tech",
           "useMemo",
           "useRef",
-          "sequelize"
-        ].map(tag => {
+          "sequelize",
+        ].map((tag) => {
           return { tag };
         })
       )
-    ).map(entity => [entity.tag, entity.id])
+    ).map((entity) => [entity.tag, entity.id])
   );
 
   const onGitHub = await Post.create({
@@ -82,7 +79,7 @@ module.exports = async function() {
     title: "Clean up your GitHub profile!",
     content: stripIndent`
           Cleaning up your GitHub profile, and writing good commit messages, can show your future employees that you're a good team player!
-        `
+        `,
   });
 
   date.subtract(1, "day");
@@ -115,7 +112,7 @@ module.exports = async function() {
           \`\`\`
 
           Isn't that just lovely? :D
-        `
+        `,
   });
 
   date.subtract(4, "days");
@@ -161,7 +158,7 @@ module.exports = async function() {
         /* ... */
       );
       \`\`\`
-    `
+    `,
   });
 
   date.subtract(3, "days");
@@ -179,7 +176,7 @@ module.exports = async function() {
           Here's a small doodle to explore:
 
           [https://xopgm.csb.app/](https://xopgm.csb.app/)
-        `
+        `,
   });
 
   date.subtract(2, "days");
@@ -260,7 +257,7 @@ module.exports = async function() {
       \`\`\`bash
       parcel index.html about.html
       \`\`\`
-    `
+    `,
   });
 
   date.subtract(2, "days");
@@ -280,7 +277,7 @@ module.exports = async function() {
       Originally used only in web browsers, JavaScript engines are also now embedded in server-side website deployments and non-browser applications.
 
       Although there are similarities between JavaScript and Java, including language name, syntax, and respective standard libraries, the two languages are distinct and differ greatly in design.
-    `
+    `,
   });
 
   date.subtract(2, "days");
@@ -296,7 +293,7 @@ module.exports = async function() {
       JSON is a language-independent data format. It was derived from JavaScript, but many modern programming languages include code to generate and parse JSON-format data. The official Internet media type for JSON is application/json. JSON filenames use the extension .json.
 
       Douglas Crockford originally specified the JSON format in the early 2000s. JSON was first standardized in 2013, as ECMA-404.[7] RFC 8259, published in 2017, is the current version of the Internet Standard STD 90, and it remains consistent with ECMA-404.[8] That same year, JSON was also standardized as ISO/IEC 21778:2017.[1] The ECMA and ISO standards describe only the allowed syntax, whereas the RFC covers some security and interoperability considerations.[9]
-    `
+    `,
   });
 
   date.subtract(2, "days");
@@ -326,7 +323,7 @@ module.exports = async function() {
       ## Don’t Overuse Refs
 
       Your first inclination may be to use refs to “make things happen” in your app. If this is the case, take a moment and think more critically about where state should be owned in the component hierarchy. Often, it becomes clear that the proper place to “own” that state is at a higher level in the hierarchy. See the Lifting State Up guide for examples of this.
-    `
+    `,
   });
 
   await sequelizeOneToOneRelationships.addTags([tags.sequelize]);
@@ -341,23 +338,23 @@ module.exports = async function() {
   await kelley.addTechnologies([
     technologies.JavaScript,
     technologies.TypeScript,
-    technologies["Promise.all"]
+    technologies["Promise.all"],
   ]);
 
   await rein.addTechnologies([
     technologies.JavaScript,
-    technologies["Learning strategies"]
+    technologies["Learning strategies"],
   ]);
 
   await PostLike.bulkCreate([
     { post_id: onRerendering.id, developer_id: rein.id },
     { post_id: onGitHub.id, developer_id: kelley.id },
-    { post_id: onGitHub.id, developer_id: rein.id }
+    { post_id: onGitHub.id, developer_id: rein.id },
   ]);
 
   await Comment.bulkCreate([
     { post_id: onEquality.id, developer_id: rein.id, text: "Lovely!" },
-    { post_id: onEquality.id, developer_id: kelley.id, text: "Thanks!" }
+    { post_id: onEquality.id, developer_id: kelley.id, text: "Thanks!" },
   ]);
 
   console.log("Fixtures in place");

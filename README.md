@@ -31,7 +31,7 @@ try {
 // POST request
 const response = await axios.post(
   "https://codaisseur-coders-network-okta.herokuapp.com/login",
-  { email: "some@email.com", password: "somepassword" } // these are the body parameters
+  { email: "some@email.com" } // these are the body parameters
 );
 
 // Authorized post request
@@ -159,66 +159,9 @@ interface Comment {
 }
 ```
 
-## Signup, login, authentication
+## Authentication
 
-We use JSON Web Tokens for authentication. Some endpoints are authenticated, which means you can only get data from them if you're logged in.
-
-- To login, you want to `POST` to `/login` with your email and password, and then you get a JWT back.
-- To access an authenticated endpoint after you've logged in, you have to send the JWT along as a header. We have a simple test authenticated endpoint at `/me`.
-- To start off, for testing purposes only, you can use the "fake" (and misformed) JWT `faketokenforkelley238765293`, which will always let you login as user #1.
-
-### Signup `POST /signup`
-
-- HTTPie:
-
-  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/signup name="Kelley van Evert" email=kelley@codaisseur.com password=abcd`
-
-- JavaScript:
-
-  ```js
-  axios
-    .post("/signup", {
-      name: "Kelley van Evert",
-      email: "kelley@codaisseur.com",
-      password: "abcd",
-    })
-    .then((data) => console.log("data", data))
-    .catch((err) => console.log("err", err));
-  ```
-
-- Response:
-
-  ```ts
-  {
-    jwt: string;
-  }
-  ```
-
-### Login `POST /login`
-
-- HTTPie:
-
-  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/login email=kelley@codaisseur.com password=abcd`
-
-- JavaScript:
-
-  ```js
-  axios
-    .post("/login", {
-      email: "kelley@codaisseur.com",
-      password: "abcd",
-    })
-    .then((data) => console.log("data", data))
-    .catch((err) => console.log("err", err));
-  ```
-
-- Response:
-
-  ```ts
-  {
-    jwt: string;
-  }
-  ```
+Authentication is done via Okta.
 
 ### Check whether authenticated / get own profile `GET /me`
 
