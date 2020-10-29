@@ -58,7 +58,7 @@ async function mustBeAuthenticated(req, res, next) {
       });
 
       if (!developer) {
-        developer = Developer.create({
+        developer = await Developer.create({
           email: jwt.username,
           name: "New User",
         });
