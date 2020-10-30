@@ -113,8 +113,26 @@ router.get(
             : undefined,
         ].filter(Boolean),
       })
-      .then((posts) => {
-        res.json(posts);
+      .then(async (data) => {
+        const allPosts = await Promise.all(
+          data.rows.map(async (post) => {
+            const postData = post.get();
+            const allLikes = await PostLike.findAll({
+              where: {
+                post_id: post.id,
+              },
+              include: [
+                {
+                  model: Developer.scope("slim"),
+                  attributes: ["id", "name", "email"],
+                },
+              ],
+            });
+            postData.post_likes = allLikes;
+            return postData;
+          })
+        );
+        res.json({ count: data.count, rows: allPosts });
       })
       .catch(next);
   }
