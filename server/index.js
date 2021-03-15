@@ -13,16 +13,17 @@ const developersRouter = require("./developers");
 const postsRouter = require("./posts");
 
 marked.setOptions({
-  highlight: function(code, lang) {
+  highlight: function (code, lang) {
     return hljs.highlight(lang, code).value;
-  }
+  },
 });
 
 const app = express();
 
 app.use(express.static(__dirname + "/../public"));
 app.use(cors());
-app.use(bodyParser());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.get("/", (req, res, next) => {
