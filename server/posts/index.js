@@ -11,9 +11,9 @@ const router = new Router();
 function findPost(req, res, next) {
   Post.scope("full")
     .findByPk(req.params.id, {
-      include: [Developer]
+      include: [Developer],
     })
-    .then(post => {
+    .then((post) => {
       if (!post) {
         res.status(404).json({ error: "Post does not exist" });
       } else {
@@ -39,24 +39,21 @@ router.post(
   validate({
     body: {
       title: Joi.string().required(),
-      content: Joi.string().required()
-    }
+      content: Joi.string().required(),
+    },
   }),
   (req, res, next) => {
     Post.create({ ...req.body, author_id: req.user.id })
       .then(({ id }) => {
         return Post.scope("full").findByPk(id, {
-          include: [Developer]
+          include: [Developer],
         });
       })
-      .then(post => {
+      .then((post) => {
         if (!post) {
           req.status(500).json({ error: "Unknown weird error!" });
         } else {
-          res
-            .status(201)
-            .header("Location", `/posts/${post.id}`)
-            .json(post);
+          res.status(201).header("Location", `/posts/${post.id}`).json(post);
         }
       })
       .catch(next);
@@ -76,8 +73,8 @@ router.get(
       limit: Joi.number(),
       offset: Joi.number(),
       tag: Joi.string(),
-      developer: Joi.number()
-    }
+      developer: Joi.number(),
+    },
   }),
   (req, res, next) => {
     const { limit = 10, offset = 0, author: author_id } = req.query;
@@ -96,16 +93,16 @@ router.get(
             ? {
                 model: Tag,
                 where: {
-                  tag: { [Sequelize.Op.in]: [req.query.tag] }
+                  tag: { [Sequelize.Op.in]: [req.query.tag] },
                 },
                 through: {
-                  attributes: []
-                }
+                  attributes: [],
+                },
               }
-            : undefined
-        ].filter(Boolean)
+            : undefined,
+        ].filter(Boolean),
       })
-      .then(posts => {
+      .then((posts) => {
         res.json(posts);
       })
       .catch(next);
@@ -118,8 +115,8 @@ router.put(
   validate({
     body: {
       title: Joi.string(),
-      content: Joi.string()
-    }
+      content: Joi.string(),
+    },
   }),
   mustBeAuthenticated,
   findPost,
@@ -127,7 +124,7 @@ router.put(
   (req, res, next) => {
     req.post
       .update(req.body)
-      .then(post => {
+      .then((post) => {
         res.json(post);
       })
       .catch(next);
@@ -142,7 +139,7 @@ router.post(
   (req, res, next) => {
     PostLike.upsert({
       developer_id: req.user.id,
-      post_id: req.post.id
+      post_id: req.post.id,
     })
       .then(() => {
         res.json({ ok: true });
@@ -160,8 +157,8 @@ router.delete(
     PostLike.destroy({
       where: {
         developer_id: req.user.id,
-        post_id: req.post.id
-      }
+        post_id: req.post.id,
+      },
     })
       .then(() => {
         res.json({ ok: true });
@@ -177,17 +174,17 @@ router.post(
   findPost,
   validate({
     body: {
-      text: Joi.string().required()
-    }
+      text: Joi.string().required(),
+    },
   }),
   (req, res, next) => {
     Comment.create({
       post_id: req.post.id,
       developer_id: req.user.id,
-      text: req.body.text
+      text: req.body.text,
     })
       .then(({ id }) => Comment.findByPk(id))
-      .then(comment => {
+      .then((comment) => {
         if (!comment) {
           req.status(500).json({ error: "Unknown weird error!" });
         } else {
@@ -205,10 +202,10 @@ router.post(
 router.get("/posts/:id/comments", findPost, (req, res, next) => {
   Comment.findAndCountAll({
     where: {
-      post_id: req.post.id
-    }
+      post_id: req.post.id,
+    },
   })
-    .then(comments => {
+    .then((comments) => {
       res.json(comments);
     })
     .catch(next);

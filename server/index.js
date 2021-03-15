@@ -109,7 +109,7 @@ async function init() {
   console.log("Starting server...");
   const fixturize = process.env.NODE_ENV === "development";
 
-  // await db.sync({ force: fixturize });
+  await db.sync({ force: fixturize });
   console.log("Database schema updated");
   if (fixturize) {
     const place_fixtures = require("./fixtures");
