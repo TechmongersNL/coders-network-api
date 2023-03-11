@@ -13,16 +13,17 @@ const developersRouter = require("./developers");
 const postsRouter = require("./posts");
 
 marked.setOptions({
-  highlight: function(code, lang) {
+  highlight: function (code, lang) {
     return hljs.highlight(lang, code).value;
-  }
+  },
 });
 
 const app = express();
 
 app.use(express.static(__dirname + "/../public"));
 app.use(cors());
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get("/", (req, res, next) => {
@@ -105,6 +106,7 @@ app.use((err, req, res, next) => {
 });
 
 async function init() {
+  console.log("Starting server...");
   const fixturize = process.env.NODE_ENV === "development";
 
   await db.sync({ force: fixturize });

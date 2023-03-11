@@ -2,7 +2,17 @@ const Sequelize = require("sequelize");
 
 const db = new Sequelize(
   process.env.DATABASE_URL ||
-    "postgres://postgres:secret@localhost:5555/postgres"
+    "postgres://postgres:secret@localhost:5555/postgres",
+  {
+    dialect: "postgres",
+    protocol: "postgres",
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  }
 );
 
 const Technology = db.define(
