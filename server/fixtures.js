@@ -12,24 +12,26 @@ const {
 module.exports = async function () {
   let date = moment();
 
-  const [kelley, rein, matias] = await Promise.all(
+  const [kelley, wouter, matias] = await Promise.all(
     [
       {
         name: "Kelley",
         email: "kelley@codaisseur.com",
-        intro: `Hi there! I'm Kelley, teacher of JavaScript, student of life`,
+        intro: `Hi there! I'm Kelley, former teacher of JavaScript, student of life`,
         github_username: "kelleyvanevert",
         website: "https://hi-im-kelley.netlify.com/",
       },
       {
-        name: "Rein",
-        email: "rein@codaisseur.com",
-        github_username: "Reinoptland",
+        name: "Wouter",
+        email: "wouter@techmongers.nl",
+        intro: "I teach code, devops and cybersecurity.",
+        github_username: "wearethefoos",
+        website: "https://www.techmongers.nl",
       },
       {
         name: "Matias",
         email: "matias@codaisseur.com",
-        intro: `Hi! I'm Matias, teacher of Codaisseur, from Uruguay!`,
+        intro: `Hi! I'm Matias, former teacher at Codaisseur, from Uruguay!`,
         github_username: "matiagarcia91",
       },
     ].map((d) => Developer.create(d))
@@ -72,7 +74,7 @@ module.exports = async function () {
   );
 
   const onGitHub = await Post.create({
-    author_id: rein.id,
+    author_id: wouter.id,
     createdAt: date.toDate(),
     updatedAt: date.toDate(),
     title: "Clean up your GitHub profile!",
@@ -117,7 +119,7 @@ module.exports = async function () {
   date.subtract(4, "days");
 
   const sequelizeOneToOneRelationships = await Post.create({
-    author_id: rein.id,
+    author_id: wouter.id,
     createdAt: date.toDate(),
     updatedAt: date.toDate(),
     title: "Sequelize One-To-One relationships",
@@ -340,19 +342,19 @@ module.exports = async function () {
     technologies["Promise.all"],
   ]);
 
-  await rein.addTechnologies([
+  await wouter.addTechnologies([
     technologies.JavaScript,
     technologies["Learning strategies"],
   ]);
 
   await PostLike.bulkCreate([
-    { post_id: onRerendering.id, developer_id: rein.id },
+    { post_id: onRerendering.id, developer_id: wouter.id },
     { post_id: onGitHub.id, developer_id: kelley.id },
-    { post_id: onGitHub.id, developer_id: rein.id },
+    { post_id: onGitHub.id, developer_id: wouter.id },
   ]);
 
   await Comment.bulkCreate([
-    { post_id: onEquality.id, developer_id: rein.id, text: "Lovely!" },
+    { post_id: onEquality.id, developer_id: wouter.id, text: "Lovely!" },
     { post_id: onEquality.id, developer_id: kelley.id, text: "Thanks!" },
   ]);
 

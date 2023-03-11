@@ -11,10 +11,10 @@ function findDeveloper(req, res, next) {
   Developer.findByPk(req.params.id, {
     include: [
       // TODO: not trivial at all: include only top 5 posts
-      Post
-    ]
+      Post,
+    ],
   })
-    .then(developer => {
+    .then((developer) => {
       if (!developer) {
         res.status(404).json({ error: "Developer does not exist" });
       } else {
@@ -46,17 +46,17 @@ router.get(
   validate({
     query: {
       limit: Joi.number(),
-      offset: Joi.number()
-    }
+      offset: Joi.number(),
+    },
   }),
   (req, res, next) => {
     const { limit = 10, offset = 0 } = req.query;
 
     Developer.findAndCountAll({
       limit,
-      offset
+      offset,
     })
-      .then(developers => {
+      .then((developers) => {
         res.json(developers);
       })
       .catch(next);
@@ -72,7 +72,7 @@ router.put(
   (req, res, next) => {
     req.developer
       .update(req.body)
-      .then(developer => {
+      .then((developer) => {
         res.json(developer);
       })
       .catch(next);
