@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const validate = require("express-validation");
 const Joi = require("joi");
-const bcrypt = require("bcrypt");
 
 const mustBeAuthenticated = require("../auth/mustBeAuthenticated");
 const { Developer, Post, Technology } = require("../model");

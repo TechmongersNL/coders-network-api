@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const moment = require("moment");
 const { stripIndent } = require("common-tags");
 const {
