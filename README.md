@@ -1,6 +1,6 @@
 # The Codaisseur Coders Network API
 
-- The API: [https://codaisseur-coders-network-okta.herokuapp.com/](https://codaisseur-coders-network-okta.herokuapp.com/)
+- The API: [https://coders-network-api-okta.herokuapp.com/](https://coders-network-api-okta.herokuapp.com/)
 - The code: [https://github.com/Codaisseur/codaisseur-coders-network/tree/okta](https://github.com/Codaisseur/codaisseur-coders-network/tree/okta)
 
 ## Introduction
@@ -20,7 +20,7 @@ We recommend you use `axios` to make your requests. Some request examples are:
 try {
   // Simple GET request
   const response = await axios.get(
-    "https://codaisseur-coders-network-okta.herokuapp.com/hello"
+    "https://coders-network-api-okta.herokuapp.com/hello"
   );
   console.log(response.data);
 } catch (error) {
@@ -30,13 +30,13 @@ try {
 // All these should also be wrapped in async functions and try/catch blocks:
 // POST request
 const response = await axios.post(
-  "https://codaisseur-coders-network-okta.herokuapp.com/login",
+  "https://coders-network-api-okta.herokuapp.com/login",
   { email: "some@email.com" } // these are the body parameters
 );
 
 // Authorized post request
 const response = await axios.post(
-  "https://codaisseur-coders-network-okta.herokuapp.com/posts",
+  "https://coders-network-api-okta.herokuapp.com/posts",
   { title: "My new post", content: "lorem ipsum" },
   {
     headers: {
@@ -53,7 +53,7 @@ If we want to avoid having to repeat the first part of the URL many times (what 
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://codaisseur-coders-network-okta.herokuapp.com",
+  baseURL: "https://coders-network-api-okta.herokuapp.com",
 });
 ```
 
@@ -80,13 +80,13 @@ _The simplest endpoint of all, just to see if everything's still working._
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/hello`
+  `http -v GET https://coders-network-api-okta.herokuapp.com/hello`
 
 - JavaScript:
 
   ```js
   axios
-    .get("https://codaisseur-coders-network-okta.herokuapp.com/hello")
+    .get("https://coders-network-api-okta.herokuapp.com/hello")
     .then((response) => console.log("data", response.data))
     .catch((err) => console.log("err", err));
   ```
@@ -167,7 +167,7 @@ Authentication is done via Okta.
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/me Authorization:"Bearer JWT"`
+  `http -v GET https://coders-network-api-okta.herokuapp.com/me Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -190,7 +190,7 @@ Authentication is done via Okta.
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/posts/1`
+  `http -v GET https://coders-network-api-okta.herokuapp.com/posts/1`
 
 - JavaScript:
 
@@ -211,7 +211,7 @@ _This is an authenticated API endpoint._
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
+  `http -v POST https://coders-network-api-okta.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -240,7 +240,7 @@ _This is an authenticated API endpoint._
 
 - HTTPie:
 
-  `http -v DELETE https://codaisseur-coders-network-okta.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
+  `http -v DELETE https://coders-network-api-okta.herokuapp.com/posts/1/likes Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -267,7 +267,7 @@ _This is an authenticated API endpoint._
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/posts/1/comments`
+  `http -v GET https://coders-network-api-okta.herokuapp.com/posts/1/comments`
 
 - JavaScript:
 
@@ -293,7 +293,7 @@ _This is an authenticated API endpoint. The new comment is made in the name of t
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/posts/1/comments Authorization:"Bearer JWT" text="Love it!"`
+  `http -v POST https://coders-network-api-okta.herokuapp.com/posts/1/comments Authorization:"Bearer JWT" text="Love it!"`
 
 - JavaScript:
 
@@ -326,7 +326,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/posts?offset=1&limit=2"`
+  `http -v GET "https://coders-network-api-okta.herokuapp.com/posts?offset=1&limit=2"`
 
 - JavaScript:
 
@@ -354,7 +354,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/posts?tag=github"`
+  `http -v GET "https://coders-network-api-okta.herokuapp.com/posts?tag=github"`
 
 - JavaScript:
 
@@ -382,7 +382,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/posts?author=1"`
+  `http -v GET "https://coders-network-api-okta.herokuapp.com/posts?author=1"`
 
 - JavaScript:
 
@@ -408,7 +408,7 @@ _This is an authenticated API endpoint. The new post is made in the name of the 
 
 - HTTPie:
 
-  `http -v POST https://codaisseur-coders-network-okta.herokuapp.com/posts Authorization:"Bearer JWT" title="ABC" content="bla bla bla"`
+  `http -v POST https://coders-network-api-okta.herokuapp.com/posts Authorization:"Bearer JWT" title="ABC" content="bla bla bla"`
 
 - JavaScript:
 
@@ -440,7 +440,7 @@ _You don't have to send all post fields. Only the included fields will be update
 
 - HTTPie:
 
-  `http -v PUT https://codaisseur-coders-network-okta.herokuapp.com/posts Authorization:"Bearer JWT" title="DEF"`
+  `http -v PUT https://coders-network-api-okta.herokuapp.com/posts Authorization:"Bearer JWT" title="DEF"`
 
 - JavaScript:
 
@@ -469,7 +469,7 @@ _This is an authenticated API endpoint. The post must be owned by the user curre
 
 - HTTPie:
 
-  `http -v DELETE https://codaisseur-coders-network-okta.herokuapp.com/posts/1 Authorization:"Bearer JWT"`
+  `http -v DELETE https://coders-network-api-okta.herokuapp.com/posts/1 Authorization:"Bearer JWT"`
 
 - JavaScript:
 
@@ -502,7 +502,7 @@ _Refer to the [`/signup`](#signup) endpoint above._
 
 - HTTPie:
 
-  `http -v GET https://codaisseur-coders-network-okta.herokuapp.com/developers/1`
+  `http -v GET https://coders-network-api-okta.herokuapp.com/developers/1`
 
 - JavaScript:
 
@@ -525,7 +525,7 @@ _Paginated with the optional `offset` and `limit` query parameters._
 
 - HTTPie:
 
-  `http -v GET "https://codaisseur-coders-network-okta.herokuapp.com/developers?offset=1&limit=2"`
+  `http -v GET "https://coders-network-api-okta.herokuapp.com/developers?offset=1&limit=2"`
 
 - JavaScript:
 
@@ -551,7 +551,7 @@ _This is an authenticated API endpoint. You can of course only edit your own pro
 
 - HTTPie:
 
-  `http -v PUT https://codaisseur-coders-network-okta.herokuapp.com/developers/1 Authorization:"Bearer JWT" name="Bla" github_username="blabla"`
+  `http -v PUT https://coders-network-api-okta.herokuapp.com/developers/1 Authorization:"Bearer JWT" name="Bla" github_username="blabla"`
 
 - JavaScript:
 
@@ -581,7 +581,7 @@ _This is an authenticated API endpoint. You can of course only delete your own a
 
 - HTTPie:
 
-  `http -v DELETE https://codaisseur-coders-network-okta.herokuapp.com/developers/1 Authorization:"Bearer JWT"`
+  `http -v DELETE https://coders-network-api-okta.herokuapp.com/developers/1 Authorization:"Bearer JWT"`
 
 - JavaScript:
 
