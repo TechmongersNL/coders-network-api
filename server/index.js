@@ -38,7 +38,7 @@ app.get("/", (req, res, next) => {
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-            <title>Codaisseur Coders Network</title>
+            <title>Techmongers Coders Network</title>
             <link rel="stylesheet" type="text/css" href="/github-markdown.css" />
             <link rel="stylesheet" type="text/css" href="/syntax.css" />
             <link rel="stylesheet" type="text/css" href="/style.css" />
