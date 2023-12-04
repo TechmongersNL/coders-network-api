@@ -1,7 +1,7 @@
 # The Techmongers Coders Network API
 
 - The API: [https://coders-network-api.herokuapp.com/](https://coders-network-api.herokuapp.com/)
-- The code: [https://github.com/TechmongersNL/codaisseur-coders-network](https://github.com/TechmongersNL/codaisseur-coders-network)
+- The code: [https://github.com/TechmongersNL/coders-network-api](https://github.com/TechmongersNL/coders-network-api)
 
 ## Introduction
 
@@ -87,8 +87,8 @@ _The simplest endpoint of all, just to see if everything's still working._
   ```js
   axios
     .get("https://coders-network-api.herokuapp.com/hello")
-    .then(response => console.log("data", response.data))
-    .catch(err => console.log("err", err));
+    .then((response) => console.log("data", response.data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -182,8 +182,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
       email: "kelley@codaisseur.com",
       password: "abcd",
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -208,8 +208,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
       email: "kelley@codaisseur.com",
       password: "abcd",
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -231,8 +231,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
   ```js
   axios
     .get("/me", { headers: { Authorization: "Bearer <yourJWTtoken>" } })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -254,8 +254,8 @@ We use JSON Web Tokens for authentication. Some endpoints are authenticated, whi
   ```js
   axios
     .get(`/posts/1`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -279,8 +279,8 @@ _This is an authenticated API endpoint._
       {}, // empty body object, no body parameters are sent.
       { headers: { Authorization: "Bearer <yourJWTtoken>" } }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -306,8 +306,8 @@ _This is an authenticated API endpoint._
     .delete(`/posts/1/likes`, {
       headers: { Authorization: "Bearer <yourJWTtoken>" },
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -331,8 +331,8 @@ _This is an authenticated API endpoint._
   ```js
   axios
     .get(`/posts/1/comments`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -367,8 +367,8 @@ _This is an authenticated API endpoint. The new comment is made in the name of t
         },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -390,8 +390,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
   ```js
   axios
     .get(`/posts?offset=1&limit=2`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -418,8 +418,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
   ```js
   axios
     .get(`/posts?tag=github`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -446,8 +446,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
   ```js
   axios
     .get(`/posts?author=2`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -481,8 +481,8 @@ _This is an authenticated API endpoint. The new post is made in the name of the 
         headers: { Authorization: "Bearer <yourJWTtoken>" },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -512,8 +512,8 @@ _You don't have to send all post fields. Only the included fields will be update
         headers: { Authorization: "Bearer <yourJWTtoken>" },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -535,8 +535,8 @@ _This is an authenticated API endpoint. The post must be owned by the user curre
     .delete("/posts/1", {
       headers: { Authorization: "Bearer <yourJWTtoken>" },
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -566,8 +566,8 @@ _Refer to the [`/signup`](#signup) endpoint above._
   ```js
   axios
     .get(`/developers/1`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -589,8 +589,8 @@ _Paginated with the optional `offset` and `limit` query parameters._
   ```js
   axios
     .get(`/developers?offset=1&limit=2`)
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -624,8 +624,8 @@ _This is an authenticated API endpoint. You can of course only edit your own pro
         headers: { Authorization: "Bearer <yourJWTtoken>" },
       }
     )
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
@@ -647,8 +647,8 @@ _This is an authenticated API endpoint. You can of course only delete your own a
     .delete(`/developers/1`, {
       headers: { Authorization: "Bearer <yourJWTtoken>" },
     })
-    .then(data => console.log("data", data))
-    .catch(err => console.log("err", err));
+    .then((data) => console.log("data", data))
+    .catch((err) => console.log("err", err));
   ```
 
 - Response:
