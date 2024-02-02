@@ -1,0 +1,32 @@
+previewsEnabled: true
+services:
+  - type: web
+    name: kyna-api
+    runtime: node
+    repo: https://github.com/TechmongersNL/coders-network-api.git
+    region: frankfurt
+    plan: free
+    branch: main
+    scaling:
+      minInstances: 1
+      maxInstances: 3
+      targetMemoryPercent: 60 # optional if targetCPUPercent is set
+      targetCPUPercent: 60 # optional if targetMemory is set
+    buildCommand: yarn --prod
+    startCommand: node server/index.js
+    # preDeployCommand: .render/pre.sh
+    healthCheckPath: /hello
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: coders-network-db
+          property: connectionString
+
+databases:
+  - name: coders-network-db
+    region: frankfurt
+    plan: free
+    databaseName: coders
+    ipAllowList:
+      - source: 0.0.0.0/0
+        description: everywhere
