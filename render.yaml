@@ -4,7 +4,7 @@ services:
     runtime: node
     repo: https://github.com/TechmongersNL/coders-network-api.git
     region: frankfurt
-    plan: free
+    plan: starter
     branch: main
     scaling:
       minInstances: 1
@@ -24,7 +24,7 @@ services:
 databases:
   - name: tm-students-db
     region: frankfurt
-    plan: free
+    plan: starter
     databaseName: coders
     ipAllowList:
       - source: 0.0.0.0/0
