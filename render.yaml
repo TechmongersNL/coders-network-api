@@ -1,7 +1,7 @@
 previewsEnabled: true
 services:
   - type: web
-    name: kyna-api
+    name: coders-network-api
     runtime: node
     repo: https://github.com/TechmongersNL/coders-network-api.git
     region: frankfurt
